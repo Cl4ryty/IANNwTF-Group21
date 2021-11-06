@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mlp import MLP
 
-# data set
+# data set and correct labels for different logical functions
 inputs = np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
 xor_labels = np.array([row[0] ^ row[1] for row in inputs])
 or_labels = np.array([row[0] or row[1] for row in inputs])
@@ -26,7 +26,7 @@ cum_false = []
 target = or_labels
 epochs = 1000
 for epoch in range(epochs):
-    print("epoch", epoch)
+    #print("epoch", epoch)
     # loop over each data point in data set
     for i, data in enumerate(inputs):
         output = mlp.forward_step(data)
@@ -41,13 +41,9 @@ for epoch in range(epochs):
         cum_false.append(nb_false)
         loss.append(np.power((output[0] - target[i]), 2))
 
-plt.plot(np.arange(epochs * 4), average_accuracy)
+plt.plot(np.arange(epochs * 4)/4, average_accuracy)
 plt.show()
-plt.plot(np.arange(epochs * 4), loss)
-plt.show()
-plt.plot(np.arange(epochs * 4), cum_false)
-plt.show()
-plt.plot(np.arange(epochs * 4), cum_correct)
+plt.plot(np.arange(epochs * 4)/4, loss)
 plt.show()
 print("correct", nb_correct)
 print("false", nb_false)

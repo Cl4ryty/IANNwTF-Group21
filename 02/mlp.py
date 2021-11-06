@@ -4,9 +4,15 @@ import activation_functions as af
 
 
 class MLP:
-    def __init__(self, inputs, hidden_layers, output_neurons):
-        # hidden layers: array of neurons in each layer
-        # output_neurons: int number
+    def __init__(self, inputs: int, hidden_layers, output_neurons: int):
+        """
+        Initializes a multi-layer perceptron with the given number of inputs,
+        hidden layers with specified numbers of perceptrons, and given number of output neurons.
+
+        :param int inputs: the number of inputs of this MLP
+        :param hidden_layers: array or list of number of perceptrons in each hidden layer
+        :param int output_neurons: number of output perceptrons
+        """
 
         # for each hidden layer (entry in hidden layers), initialize corresponding number of perceptrons
         self.hidden_layers = []
@@ -24,6 +30,12 @@ class MLP:
         self.output = np.array([-1.0] * output_neurons)
 
     def forward_step(self, inputs):
+        """
+        Performs a forward pass through the MLP using the given inputs.
+
+        :param inputs: array of numeric inputs
+        :return: numpy array of outputs
+        """
         # step through each layer and use the respective outputs as inputs for the next layer
         for layer in self.hidden_layers:
             next_inputs = []
@@ -36,10 +48,15 @@ class MLP:
         return self.output
 
     def backprop_step(self, targets):
+        """
+        Performs backpropagation through the MLP,
+        adapting the perceptrons according to the error calculated given the targets.
 
+        :param targets: target values for the MLP output given the last inputs
+        """
         # calculate errors from results and targets
         m = len(self.output_neurons)
-        deltas = (2 / m) * (targets - self.output) * [af.sigmoidprime(n.drive) for n in self.output_neurons]
+        deltas = -(targets - self.output) * [af.sigmoidprime(n.drive) for n in self.output_neurons]
 
         for i, neuron in enumerate(self.output_neurons):
             neuron.update(deltas[i])
@@ -51,9 +68,12 @@ class MLP:
 
             for i, neuron in enumerate(layer):
                 # calculate error for this neuron
-                e = np.sum(deltas *
-                           [n.weights[i + 1] for n in self.hidden_layers[l - 1]] if l > 0 else [n.weights[i + 1] for n in self.output_neurons])\
-                    * af.sigmoidprime(neuron.drive)
+                if l > 0:
+                    tmp = [n.weights[i + 1] for n in self.hidden_layers[len(self.hidden_layers)-l]]
+                else:
+                    tmp = [n.weights[i + 1] for n in self.output_neurons]
+
+                e = np.sum(np.array(deltas) * tmp) * af.sigmoidprime(neuron.drive)
 
                 new_deltas.append(e)
 
