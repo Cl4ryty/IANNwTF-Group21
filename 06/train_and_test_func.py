@@ -17,7 +17,7 @@ def training_step(model, input, target, loss_function, optimizer):
     :rtype: tf.Tensor
     """
     with tf.GradientTape() as tape:
-        prediction = model(input)
+        prediction = model(input, training=True)
         loss = loss_function(target, prediction)
         gradients = tape.gradient(loss, model.trainable_variables)
     optimizer.apply_gradients(zip(gradients, model.trainable_variables))
