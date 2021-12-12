@@ -45,8 +45,6 @@ def test(model, test_data, loss_function):
 
     for (input, target) in test_data:
         prediction = model(input)[-1]
-        # print("prediction", tf.expand_dims(prediction, 1))
-        # print("target", target)
         prediction = tf.expand_dims(prediction, 1)
         sample_test_loss = loss_function(target, prediction)
         sample_test_accuracy = np.argmax(target, axis=2) == np.argmax(prediction, axis=2)

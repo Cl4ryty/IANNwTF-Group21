@@ -127,7 +127,7 @@ class LSTM_Layer(tf.keras.layers.Layer):
         return states.stack()
 
 
-class LSTM_Model(tf.keras.layers.Layer):
+class LSTM_Model(tf.keras.models.Model):
     """
     A simple LSTM model consisting of a LSTM layer with one LSTM cell and an output layer.
     """
